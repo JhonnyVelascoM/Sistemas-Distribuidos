@@ -1,44 +1,46 @@
 import Pyro4
 
 def main():
-    inventario = Pyro4.Proxy("PYRONAME:inventario.servicio")
-    
+    write = Pyro4.Proxy("PYRONAME:inventario.write")
+    read = Pyro4.Proxy("PYRONAME:inventario.readonly")
+
     while True:
-        menu = inventario.obtener_menu()
-        opcion = input(menu)
-        
+        print("""
+1. Agregar producto
+2. Actualizar stock
+3. Eliminar producto
+4. Consultar producto
+5. Listar productos
+0. Salir
+        """)
+        opcion = input("Opción: ")
+
         if opcion == "1":
             id = input("ID: ")
             nombre = input("Nombre: ")
             stock = int(input("Stock: "))
-            resultado = inventario.agregar_producto(id, nombre, stock)
-            print(resultado)
-        
+            print(write.agregar_producto(id, nombre, stock))
+
         elif opcion == "2":
             id = input("ID: ")
-            resultado = inventario.obtener_producto(id)
-            print(resultado)
-        
+            stock = int(input("Nuevo stock: "))
+            print(write.actualizar_stock(id, stock))
+
         elif opcion == "3":
             id = input("ID: ")
-            stock = int(input("Nuevo stock: "))
-            resultado = inventario.actualizar_stock(id, stock)
-            print(resultado)
-        
+            print(write.eliminar_producto(id))
+
         elif opcion == "4":
-            resultado = inventario.listar_productos()
-            print(resultado)
-        
-        elif opcion == "5":
             id = input("ID: ")
-            resultado = inventario.eliminar_producto(id)
-            print(resultado)
-        
+            print(read.obtener_producto(id))
+
+        elif opcion == "5":
+            print(read.listar_productos())
+
         elif opcion == "0":
-            print("¡Hasta luego!")
             break
-        
-        input("\n Presiona Enter para continuar...")
+
+        input("\nPresiona Enter para continuar...")
 
 if __name__ == "__main__":
     main()

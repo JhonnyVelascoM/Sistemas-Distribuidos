@@ -1,0 +1,10 @@
+{
+    "001": {
+        "nombre": "bananas",
+        "stock": 25
+    },
+    "002": {
+        "nombre": "manzanas",
+        "stock": 30
+    }
+}

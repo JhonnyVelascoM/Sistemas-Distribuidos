@@ -1,0 +1,1 @@
+[Key.esc]barcelona[Key.space]campeon[Key.enter][Key.esc]

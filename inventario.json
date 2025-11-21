@@ -1,10 +1,14 @@
 {
     "001": {
-        "nombre": "bananas",
-        "stock": 25
+        "nombre": "parlantes",
+        "stock": 16
     },
     "002": {
-        "nombre": "manzanas",
-        "stock": 30
+        "nombre": "camara",
+        "stock": 16
+    },
+    "003": {
+        "nombre": "mouse",
+        "stock": 13
     }
 }

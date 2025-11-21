@@ -1,3 +1,4 @@
+# client.py
 import Pyro4
 
 def main():
@@ -38,6 +39,7 @@ def main():
             print(read.listar_productos())
 
         elif opcion == "0":
+            print("Saliendo…")
             break
 
         input("\nPresiona Enter para continuar...")

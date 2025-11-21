@@ -2,7 +2,6 @@ import Pyro4
 import threading
 import json
 import os
-import time
 
 RUTA_DB = "inventario.json"
 
@@ -14,23 +13,31 @@ class InventarioReadOnly:
         self.cargar_desde_archivo()
 
     def cargar_desde_archivo(self):
+        """Carga el archivo JSON o lo crea si no existe."""
         if os.path.exists(RUTA_DB):
-            with open(RUTA_DB, "r") as f:
-                try:
+            try:
+                with open(RUTA_DB, "r") as f:
                     self.productos = json.load(f)
-                except:
-                    self.productos = {}
+            except:
+                print("JSON corrupto. Creando uno nuevo.")
+                self.productos = {}
+                self.guardar()
         else:
+            print("JSON no encontrado. Creando nuevo.")
             self.productos = {}
+            self.guardar()
+
+    def guardar(self):
+        """Guarda los datos en el archivo JSON."""
+        with open(RUTA_DB, "w") as f:
+            json.dump(self.productos, f, indent=4)
 
     def sincronizar(self, nuevos_productos):
-        """Server1 enviará los datos actualizados para mantener consistencia eventual"""
+        """Recibe datos actualizados desde Server1."""
         with self.lock:
             self.productos = nuevos_productos
-            with open(RUTA_DB, "w") as f:
-                json.dump(self.productos, f, indent=4)
+            self.guardar()
 
-    # Métodos solo de lectura
     def listar_productos(self):
         with self.lock:
             if not self.productos:
@@ -47,14 +54,14 @@ class InventarioReadOnly:
                 return f"{id}: {p['nombre']} - Stock: {p['stock']}"
             return "Error: Producto no encontrado"
 
-# Arranque
+
 def main():
     daemon = Pyro4.Daemon()
     ns = Pyro4.locateNS()
-    server2 = InventarioReadOnly()
-    uri = daemon.register(server2)
+    servidor = InventarioReadOnly()
+    uri = daemon.register(servidor)
     ns.register("inventario.readonly", uri)
-    print("Server2 iniciado (solo lectura / persistencia JSON)")
+    print("Server2 iniciado")
     daemon.requestLoop()
 
 if __name__ == "__main__":

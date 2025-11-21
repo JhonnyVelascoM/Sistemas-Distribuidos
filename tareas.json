@@ -1,0 +1,12 @@
+[
+    {
+        "id": 1,
+        "descripcion": "Ejercicios practicos",
+        "estado": "completada"
+    },
+    {
+        "id": 2,
+        "descripcion": "Prueba Unidad2",
+        "estado": "pendiente"
+    }
+]
